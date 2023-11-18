@@ -26,6 +26,10 @@ const productSchema  = new Schema({
         type: String,
         required : [true, "Product status must be provided"]
 
+    },
+    productImage : {
+        type : String,
+        
     }
     
 
