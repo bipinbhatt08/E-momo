@@ -17,6 +17,7 @@ connectDatabase()
 // ROutes here
 const authRoute= require("./routes/authRoutes")
 const productRoute= require("./routes/productRoutes")
+const adminUsersRoute= require("./routes/adminUsersRoutes")
 
 
 // test api to check if server is live or not
@@ -32,6 +33,7 @@ app.use("/api",authRoute)//yo middleware ho
 // if app.user("/ok", ) vako vaye : /ok/register hunthyo
 
 app.use("/api",productRoute)
+app.use("/api",adminUsersRoute)
 
 //listen server
 

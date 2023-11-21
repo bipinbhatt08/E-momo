@@ -1,4 +1,6 @@
 const Product = require("../../../model/productModel")
+const fs = require('fs');
+
 // product create api
 exports.createProduct = async(req,res)=>{
     const file = req.file
@@ -63,3 +65,74 @@ exports.getProduct = async(req,res)=>{
         })
     }
 }
+
+// delete api
+exports.deleteProduct = async(req,res)=>{
+    const id = req.params.id
+    if(!id){
+        return res.status(400).json({
+            message: "Provide id of product"
+        })
+    }
+    const productExists = await Product.find({_id:id})
+    if(productExists.length==0){
+        return res.status(400).json({
+            message: "Invalid id"
+        }) 
+    }
+    const oldProductImage = productExists[0].productImage
+    const oldProductImageFileName = oldProductImage.slice(22)
+    await Product.findByIdAndDelete(id)
+    fs.unlink(`uploads/${oldProductImageFileName}`,(err)=>{
+        if(err){
+            console.log("Error deleting file",err)
+        }else{
+            console.log("File deleted succesfully")
+        }
+    })
+    res.status(200).json({
+        message: "Product deleted successfully"
+    })
+}
+
+
+// update api
+exports.editProduct = async(req,res)=>{
+    const id = req.params.id
+    const {productName, productDescription, productPrice, productStatus, productStockQty } = req.body
+    if(!productName||!productPrice ||!productDescription || !productStatus || !productStockQty ){
+         return res.status(404).json({
+            message: "Provide productName, productPrice,productDescription, productStatus and productStockQty."
+        })
+    }
+    const oldData = await Product.findById(id)
+    if(!oldData){
+        return res.status(400).json({
+            message: "No data found with that id"
+        })
+    }
+    const oldProductImage= oldData.productImage
+    const oldProductImageFileName = oldProductImage.slice(22)
+    console.log(oldProductImageFileName)
+    if(req.file && req.file.filename){
+        fs.unlink(`uploads/${oldProductImageFileName}`,(err)=>{
+            if(err){
+                console.log("Error deleting file",err)
+            }else{
+                console.log("File deleted succesfully")
+            }
+        })
+    }
+    await Product.findByIdAndUpdate(id,{
+        productName,
+        productDescription,
+        productPrice, 
+        productStatus,
+        productStockQty,
+        productImage :req.file && req.file.filename? `http://localhost:${process.env.PORT}/${req.file.filename}` :oldProductImage
+    })
+    res.status(200).json({
+        message: " Product updated successfully"
+    })
+}
+
