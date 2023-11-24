@@ -18,6 +18,7 @@ connectDatabase()
 const authRoute= require("./routes/authRoutes")
 const productRoute= require("./routes/productRoutes")
 const adminUsersRoute= require("./routes/adminUsersRoutes")
+const userReviewRoute = require("./routes/userReviewRoutes")
 
 
 // test api to check if server is live or not
@@ -34,6 +35,7 @@ app.use("/api",authRoute)//yo middleware ho
 
 app.use("/api",productRoute)
 app.use("/api",adminUsersRoute)
+app.use("/api",userReviewRoute)
 
 //listen server
 

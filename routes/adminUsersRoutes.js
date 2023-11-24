@@ -1,4 +1,5 @@
-const { getUser, deleteUser, getUsers } = require("../controller/user/userController")
+
+const { getUsers, deleteUser, getUser } = require("../controller/admin/user/userController")
 const isAuthenticated = require("../middleware/isAuthenticated")
 const { restrictTo } = require("../middleware/restrictTo")
 const { catchAsync } = require("../services/catchAsync")
