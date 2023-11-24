@@ -80,3 +80,20 @@ exports.deleteReview = async(req,res)=>{
         message: "Review delete succesfully",
     })
 }
+
+exports.addProductReview  = async(req,res)=>{
+    const productId = req.params.id
+    const {rating,message} = req.body
+    const userId = req.user.id
+    
+    const product = await Product.findById(productId)
+    product.reviews.push({
+        message,
+        rating,
+        userId
+    })
+    await product.save()
+    res.json({
+        message: "Review Done"
+    })
+}

@@ -31,7 +31,15 @@ exports.createProduct = async(req,res)=>{
 }
 // get product api
 exports.getProducts = async(req,res)=>{
-    const products = await Product.find()
+    const products = await Product.find().populate({
+        path : "reviews",
+        populate : {
+            path: "userId",
+            select : "username userEmail"
+        }
+
+
+    })
     if(products.length == 0){
         res.status(400).json({
             message : "No product found",
