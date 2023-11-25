@@ -29,50 +29,6 @@ exports.createProduct = async(req,res)=>{
     })
 
 }
-// get product api
-exports.getProducts = async(req,res)=>{
-    const products = await Product.find().populate({
-        path : "reviews",
-        populate : {
-            path: "userId",
-            select : "username userEmail"
-        }
-
-
-    })
-    if(products.length == 0){
-        res.status(400).json({
-            message : "No product found",
-            products : []
-        })
-    }else{
-        res.status(200).json({
-            message: "Products fetched succesfully",
-            products
-        })
-    }
-}
-
-exports.getProduct = async(req,res)=>{
-    const id = req.params.id
-    if(!id){
-        return res.status(400).json({
-            message : "Please provide is of the product."
-        })
-    }
-    const product = await Product.find({_id:id})
-    if(product.length==0){
-        res.status(400).json({
-            message : "No product found",
-            products : []
-        })
-    }else{
-        res.status(200).json({
-            message: "Product fetched succesfully",
-            product
-        })
-    }
-}
 
 // delete api
 exports.deleteProduct = async(req,res)=>{

@@ -1,5 +1,5 @@
-const Review = require("../../model/reviewModel")
-const Product = require("../../model/productModel")
+const Review = require("../../../model/reviewModel")
+const Product = require("../../../model/productModel")
 exports.createReview = async (req,res)=>{
     const userId = req.user.id
     const {rating, message} = req.body
@@ -37,39 +37,24 @@ exports.createReview = async (req,res)=>{
 
 }
 
-exports.getProductReview = async(req,res)=>{
-    const productId = req.params.id
-    if(!productId){
-        return res.status(400).json({
-            message: "Please provide productId"
-        })
-    }
-    const productExist = await Product.findById(productId)
-    if(!productExist){
-        return res.status(404).json({
-            message: "No product of this  productId"
-        })
-    }
-    const reviews = await Review.find({productId}).populate("userId")//join garna ko lagi ho...
-    if(reviews.length==0){
-        return res.status(404).json({
-            message: "No review for this product"
-        })
-    }
-    res.status(200).json({
-        message: " Review fetched successfully",
-        data : reviews
-    })
-}
+
 
 exports.deleteReview = async(req,res)=>{
     const reviewId = req.params.id
-    if(!reveiwId){
+    const userId = req.user.id
+    const review = await Review.findById(reviewId)
+    const ownerOfReview = review.userId
+    if(ownerOfReview!==userId){
+        return res.status(400).json({
+            message: "You don't have authority to delete this review"
+        })
+    }
+    if(!reviewId){
         return res.status(400).json({
             message: "Please provide reviewId"
         })
     }
-    const review = await Review.findById(reviewId)
+    // const review = await Review.findById(reviewId)
     if (!review) {
         return res.status(404).json({
             message: "No review with this ID found"
@@ -81,19 +66,35 @@ exports.deleteReview = async(req,res)=>{
     })
 }
 
-exports.addProductReview  = async(req,res)=>{
-    const productId = req.params.id
-    const {rating,message} = req.body
+
+exports.getMyReviews = async(req,res)=>{
     const userId = req.user.id
-    
-    const product = await Product.findById(productId)
-    product.reviews.push({
-        message,
-        rating,
-        userId
-    })
-    await product.save()
-    res.json({
-        message: "Review Done"
+    const myReviews = await Review.find({userId})
+    if(myReviews.length==0){
+        return res.status(404).json({
+            message: "No reviews found",
+            data : []
+        })
+    }
+    res.status(200).json({
+        message: "Review fetched succesfully",
+        data :myReviews
     })
 }
+
+// exports.addProductReview  = async(req,res)=>{
+//     const productId = req.params.id
+//     const {rating,message} = req.body
+//     const userId = req.user.id
+    
+//     const product = await Product.findById(productId)
+//     product.reviews.push({
+//         message,
+//         rating,
+//         userId
+//     })
+//     await product.save()
+//     res.json({
+//         message: "Review Done"
+//     })
+// }

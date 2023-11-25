@@ -31,7 +31,7 @@ const productSchema  = new Schema({
     productImage : {
         type : String,
     },
-    reviews : [reviewSchema]
+    // reviews : [reviewSchema] //yo chaine second way ko lagi ho
     
 
 } ,{

@@ -15,10 +15,11 @@ connectDatabase()
 
 
 // ROutes here
-const authRoute= require("./routes/authRoutes")
-const productRoute= require("./routes/productRoutes")
-const adminUsersRoute= require("./routes/adminUsersRoutes")
-const userReviewRoute = require("./routes/userReviewRoutes")
+const authRoute= require("./routes/auth/authRoutes")
+const productRoute= require("./routes/admin/productRoutes")
+const adminUsersRoute= require("./routes/admin/adminUsersRoutes")
+const userReviewRoute = require("./routes/user/userReviewRoutes")
+const profileRoute  = require("./routes/user/profileRoutes")
 
 
 // test api to check if server is live or not
@@ -29,13 +30,14 @@ app.get('/',(req,res)=>{
     })
 })
 
-app.use("/api",authRoute)//yo middleware ho
+app.use("/api/auth",authRoute)//yo middleware ho
 // jastai /register aayo vane: ""+"/register hunxa" ani /register vanne ma khulxa
 // if app.user("/ok", ) vako vaye : /ok/register hunthyo
 
-app.use("/api",productRoute)
-app.use("/api",adminUsersRoute)
-app.use("/api",userReviewRoute)
+app.use("/api/products",productRoute)
+app.use("/api/admin",adminUsersRoute)
+app.use("/api/reviews",userReviewRoute)
+app.use("/api/profile",profileRoute)
 
 //listen server
 

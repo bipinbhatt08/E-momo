@@ -41,17 +41,20 @@ exports.loginUser = async(req,res)=>{
             message: "Please provide email and password"
         })
     }
+    
     // checking users existance
-    const userFound= await User.find({userEmail:email})
+    const userFound= await User.find({userEmail:email}).select("userPassword userEmail")
     if(userFound.length==0){
          return res.status(400).json({
             message: "No user found"
         })
     }
     
+    
     // password check
     const isMatched = bcrypt.compareSync(password,userFound[0].userPassword )
     
+
     if(isMatched){
         // generate token
         const token = jwt.sign({id : userFound[0]._id}, process.env.SECRET_KEY,
