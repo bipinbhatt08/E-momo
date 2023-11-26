@@ -1,7 +1,9 @@
+
 const User = require("../../../model/userModel")
 
 exports.getUsers = async(req,res)=>{
     let userId = req.user.id
+    
     let users = await User.find({_id: {$ne:userId}}) //$ne vaneko not equal
 
     //if password pani chaiyema find().select("+userPassword") badhi vaye select("+userPassword","+userName")

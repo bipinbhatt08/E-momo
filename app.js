@@ -20,6 +20,7 @@ const productRoute= require("./routes/admin/productRoutes")
 const adminUsersRoute= require("./routes/admin/adminUsersRoutes")
 const userReviewRoute = require("./routes/user/userReviewRoutes")
 const profileRoute  = require("./routes/user/profileRoutes")
+const cartRoute = require("./routes/user/cartRoutes")
 
 
 // test api to check if server is live or not
@@ -38,7 +39,7 @@ app.use("/api/products",productRoute)
 app.use("/api/admin",adminUsersRoute)
 app.use("/api/reviews",userReviewRoute)
 app.use("/api/profile",profileRoute)
-
+app.use("/api/cart",cartRoute)
 //listen server
 
 app.listen(process.env.PORT,()=>{
